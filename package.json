@@ -1,0 +1,27 @@
+{
+  "name": "easy-khata-web",
+  "version": "1.0.0",
+  "description": "Easy Khata Web PWA Application",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "typescript": "^5.8.3",
+    "vite": "^5.1.0",
+    "vite-plugin-pwa": "^0.17.5"
+  },
+  "dependencies": {
+    "@google/genai": "^1.11.0",
+    "@types/node": "^24.1.0",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "workbox-window": "^7.0.0"
+  }
+}
