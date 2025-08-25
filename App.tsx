@@ -197,17 +197,7 @@ const DashboardScreen: React.FC<{ data: ReturnType<typeof useAppData>; onAddTran
     }, [data.transactions]);
     
     return (
-        <div className="p-4 sm:p-6 space-y-6">
-            <div className="grid grid-cols-2 gap-4">
-                <button onClick={() => onAddTransaction(TransactionType.Sale)} className="bg-blue-600 text-white p-4 rounded-xl shadow-lg shadow-blue-500/20 flex items-center justify-center space-x-3 hover:bg-blue-700 transition-all transform hover:-translate-y-0.5 active:scale-95 active:translate-y-0">
-                    {ICONS.add}
-                    <span className="text-lg font-semibold">{t('add_sale', lang)}</span>
-                </button>
-                <button onClick={() => onAddTransaction(TransactionType.Purchase)} className="bg-white text-gray-800 border border-gray-200 p-4 rounded-xl shadow-sm flex items-center justify-center space-x-3 hover:bg-gray-50 transition-all transform hover:-translate-y-0.5 active:scale-95 active:translate-y-0">
-                    {ICONS.subtract}
-                    <span className="text-lg font-semibold">{t('add_purchase', lang)}</span>
-                </button>
-            </div>
+        <div className="p-4 sm:p-6 space-y-6 pb-32">{/* Added extra bottom padding for buttons */}
             <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-200">
                 <h3 className="text-base font-semibold text-gray-800 mb-4">{t('today_summary', lang)}</h3>
                 <div className="grid grid-cols-3">
@@ -822,6 +812,21 @@ const MainApp: React.FC<{ lang: Language; onLangChange: (l: Language) => void; b
       <main>
         {renderActiveView()}
       </main>
+      {/* Add Sale and Add Purchase buttons fixed at bottom above navbar */}
+      {activeView === 'dashboard' && (
+        <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 w-full max-w-4xl px-4 z-30">
+          <div className="grid grid-cols-2 gap-4">
+            <button onClick={() => handleAddTransactionClick(TransactionType.Sale)} className="bg-blue-600 text-white p-4 rounded-xl shadow-lg shadow-blue-500/20 flex items-center justify-center space-x-3 hover:bg-blue-700 transition-all transform hover:-translate-y-0.5 active:scale-95 active:translate-y-0">
+              {ICONS.add}
+              <span className="text-lg font-semibold">{t('add_sale', lang)}</span>
+            </button>
+            <button onClick={() => handleAddTransactionClick(TransactionType.Purchase)} className="bg-white text-gray-800 border border-gray-200 p-4 rounded-xl shadow-sm flex items-center justify-center space-x-3 hover:bg-gray-50 transition-all transform hover:-translate-y-0.5 active:scale-95 active:translate-y-0">
+              {ICONS.subtract}
+              <span className="text-lg font-semibold">{t('add_purchase', lang)}</span>
+            </button>
+          </div>
+        </div>
+      )}
       {isMainView && <BottomNav activeView={activeView} onViewChange={setActiveView} lang={lang} />}
       <AddTransactionModal 
         isOpen={isAddTxModalOpen} 
