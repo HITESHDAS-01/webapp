@@ -48,7 +48,7 @@ export const BUSINESS_ITEMS: Record<BusinessType, string[]> = {
 
 const translations: Record<Language, Record<string, string>> = {
   en: {
-    app_name: 'Hisab PWA',
+    app_name: 'Easy Khata',
     dashboard: 'Dashboard',
     history: 'History',
     credit: 'Credit (Udhaar)',
@@ -186,13 +186,13 @@ const translations: Record<Language, Record<string, string>> = {
     top_products_by_value: 'Top Selling Products by Value',
     no_report_data_title_v2: 'No data to show',
     no_report_data_desc_v2: 'Add sales and purchases to view reports.',
-    auth_welcome: 'Welcome to Hisab PWA',
+    auth_welcome: 'Welcome to Easy Khata',
     tagline: 'Your business, simplified.',
     skip_for_now: 'Skip for now',
     auth_terms_notice: 'By signing up, you agree to our Terms and Privacy Policy.',
   },
   hi: {
-    app_name: 'हिसाब पीडब्लूए',
+    app_name: 'Easy Khata',
     dashboard: 'डैशबोर्ड',
     history: 'इतिहास',
     credit: 'उधार',
@@ -336,7 +336,7 @@ const translations: Record<Language, Record<string, string>> = {
     auth_terms_notice: 'साइन अप करके, आप हमारी शर्तों और गोपनीयता नीति से सहमत होते हैं।',
   },
   as: {
-    app_name: 'হিচাপ পিডব্লিউএ',
+    app_name: 'Easy Khata',
     dashboard: 'ডেশব’ৰ্ড',
     history: 'ইতিহাস',
     credit: 'বাকী (উধাৰ)',

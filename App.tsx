@@ -5,7 +5,7 @@ import { Transaction, Contact, Settlement, HistoryItem, TransactionType, Payment
 import { ICONS, t, BUSINESS_ITEMS } from './Constant';
 import { generateReportSummary } from './services/geminiServices';
 
-type AppView = 'splash' | 'auth' | 'login' | 'signup' | 'main';
+type AppView = 'main';
 type MainAppView = 'dashboard' | 'history' | 'credit' | 'reports' | 'profile' | 'settings' | 'about';
 
 const formatCurrency = (amount: number) => {
@@ -72,10 +72,9 @@ const LanguageSelector: React.FC<{ lang: Language; onLangChange: (l: Language) =
 const Header: React.FC<{
     title: string;
     onNavigate: (view: MainAppView) => void;
-    onLogout: () => void;
     lang: Language;
     onLangChange: (l: Language) => void;
-}> = ({ title, onNavigate, onLogout, lang, onLangChange }) => {
+}> = ({ title, onNavigate, lang, onLangChange }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
@@ -123,15 +122,6 @@ const Header: React.FC<{
                                             {item.label}
                                         </a>
                                     ))}
-                                    <div className="border-t border-gray-100 my-2"></div>
-                                    <a
-                                        href="#"
-                                        onClick={e => { e.preventDefault(); onLogout(); }}
-                                        className="flex items-center px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                    >
-                                        {ICONS.menu_logout}
-                                        {t('logout', lang)}
-                                    </a>
                                 </div>
                             </div>
                         )}
@@ -775,165 +765,8 @@ const SettleModal: React.FC<{
 
 // #endregion
 
-// #region Authentication Screens
 
-const SplashScreen: React.FC<{ onGetStarted: () => void; lang: Language }> = ({ onGetStarted, lang }) => (
-    <div className="fixed inset-0 bg-gradient-to-br from-blue-500 to-indigo-600 flex flex-col items-center justify-center p-8 text-white text-center">
-        <div className="animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
-            <div className="mb-6 h-12 w-12 flex items-center justify-center">{React.cloneElement(ICONS.logo, {width: 48, height: 48})}</div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">{t('welcome_message', lang)}</h1>
-            <p className="text-lg text-blue-200 max-w-md mx-auto">The simplest way to manage your business finances.</p>
-        </div>
-        <div className="fixed bottom-16">
-            <button 
-                onClick={onGetStarted} 
-                className="bg-white text-blue-600 font-bold py-3 px-8 rounded-full shadow-2xl text-lg hover:bg-blue-50 transition-transform transform hover:scale-105 active:scale-100 animate-fadeInUp"
-                style={{ animationDelay: '0.6s' }}
-            >
-                {t('get_started', lang)}
-            </button>
-        </div>
-    </div>
-);
-
-const AuthScreen: React.FC<{
-    onNavigate: (view: AppView) => void;
-    onGoogleLogin: () => void;
-    onSkip: () => void;
-    lang: Language;
-}> = ({ onNavigate, onGoogleLogin, onSkip, lang }) => {
-    return (
-        <div className="fixed inset-0 bg-slate-50 flex flex-col justify-center items-center p-6 sm:p-8 animate-fadeIn">
-            <div className="w-full max-w-sm text-center">
-                <h1 className="text-2xl font-semibold text-gray-600 mb-6">{t('auth_welcome', lang)}</h1>
-
-                <div className="flex justify-center mb-4">
-                    <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center">
-                        {React.cloneElement(ICONS.logo, { width: 40, height: 40 })}
-                    </div>
-                </div>
-                
-                <h2 className="text-3xl font-bold text-gray-800 tracking-tight">{t('app_name', lang)}</h2>
-                <p className="text-gray-500 mt-1 mb-10">{t('tagline', lang)}</p>
-
-                <div className="space-y-3">
-                    <button
-                        onClick={() => onNavigate('signup')}
-                        className="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition-all transform hover:-translate-y-0.5 active:scale-95 active:shadow-md"
-                    >
-                        {t('signup', lang)}
-                    </button>
-                    <button
-                        onClick={() => onNavigate('login')}
-                        className="w-full bg-white text-gray-800 font-bold py-3 px-6 rounded-xl border-2 border-gray-200 hover:bg-gray-100 hover:border-gray-300 transition-all transform hover:-translate-y-0.5 active:scale-95"
-                    >
-                        {t('login', lang)}
-                    </button>
-                </div>
-
-                <div className="flex items-center my-6">
-                    <hr className="flex-grow border-t border-gray-200" />
-                    <span className="mx-4 text-gray-400 text-sm font-medium">{t('or_divider', lang)}</span>
-                    <hr className="flex-grow border-t border-gray-200" />
-                </div>
-
-                <button
-                    onClick={onGoogleLogin}
-                    className="w-full bg-white text-gray-700 font-semibold py-3 px-6 rounded-xl border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors flex items-center justify-center active:scale-95"
-                >
-                    {ICONS.google}
-                    {t('login_with_google', lang)}
-                </button>
-
-                <div className="mt-8">
-                    <button onClick={onSkip} className="text-gray-500 font-semibold text-sm hover:text-blue-600 transition-colors">
-                        {t('skip_for_now', lang)}
-                    </button>
-                    <p className="text-xs text-gray-400 mt-6 max-w-xs mx-auto">
-                        {t('auth_terms_notice', lang)}
-                    </p>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-const AuthFormCard: React.FC<{ title: string, children: React.ReactNode, onBack: () => void; lang: Language }> = ({ title, children, onBack, lang }) => (
-     <div className="fixed inset-0 bg-gray-50 flex flex-col items-center justify-center p-4">
-        <div className="w-full max-w-md animate-fadeInUp">
-           <button onClick={onBack} className="flex items-center text-gray-600 font-semibold mb-4 hover:text-blue-600 transition-colors group">
-                <span className="p-1.5 rounded-full bg-gray-200 group-hover:bg-blue-100 transition-colors">{React.cloneElement(ICONS.arrow_left, {className: "w-5 h-5"})}</span>
-                <span className="ml-2">{t('back', lang)}</span>
-           </button>
-            <div className="bg-white p-8 sm:p-10 rounded-2xl shadow-2xl border border-gray-200">
-                <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">{title}</h1>
-                {children}
-            </div>
-        </div>
-    </div>
-);
-
-const SignUpScreen: React.FC<{ onSignUp: (businessType: BusinessType) => void; onNavigate: (view: AppView) => void; lang: Language }> = ({ onSignUp, onNavigate, lang }) => {
-    const [businessType, setBusinessType] = useState<BusinessType | ''>('');
-    const inputStyle = "block w-full rounded-lg border-0 py-2.5 px-3.5 bg-gray-100 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 transition-colors duration-200";
-    const selectStyle = `${inputStyle} appearance-none pr-10 bg-no-repeat bg-[position:right_0.75rem_center] bg-[length:1.5em_1.5em] bg-[url('data:image/svg+xml,%3csvg xmlns=%22http://www.w3.org/2000/svg%22 fill=%22none%22 viewBox=%220 0 20 20%22%3e%3cpath stroke=%22%236b7280%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22 stroke-width=%221.5%22 d=%22M6 8l4 4 4-4%22/%3e%3c/svg%3e')] invalid:text-gray-400`;
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (businessType) {
-            onSignUp(businessType);
-        }
-    };
-    
-    return (
-    <AuthFormCard title={t('create_your_account', lang)} onBack={() => onNavigate('auth')} lang={lang}>
-        <form onSubmit={handleSubmit} className="space-y-5">
-            <input type="email" placeholder={t('email', lang)} required className={inputStyle} />
-            <input type="password" placeholder={t('password', lang)} required className={inputStyle} />
-            <select 
-                required 
-                value={businessType}
-                onChange={e => setBusinessType(e.target.value as BusinessType)}
-                className={selectStyle}
-            >
-                <option value="" disabled>{t('business_type', lang)}</option>
-                <option value={BusinessType.Kirana}>{t('business_kirana', lang)}</option>
-                <option value={BusinessType.Pharmacy}>{t('business_pharmacy', lang)}</option>
-                <option value={BusinessType.Electronics}>{t('business_electronics', lang)}</option>
-                <option value={BusinessType.HotelRestaurant}>{t('business_hotel_restaurant', lang)}</option>
-                <option value={BusinessType.Other}>{t('business_other', lang)}</option>
-            </select>
-            <button type="submit" className="w-full bg-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-blue-600 transition-colors">
-                {t('signup', lang)}
-            </button>
-            <p className="text-center text-sm text-gray-500 pt-2">
-                {t('already_have_account', lang)} <button type="button" onClick={() => onNavigate('login')} className="font-semibold text-blue-600 hover:underline">{t('login', lang)}</button>
-            </p>
-        </form>
-    </AuthFormCard>
-    );
-};
-
-const LoginScreen: React.FC<{ onLogin: () => void; onNavigate: (view: AppView) => void; lang: Language }> = ({ onLogin, onNavigate, lang }) => {
-    const inputStyle = "block w-full rounded-lg border-0 py-2.5 px-3.5 bg-gray-100 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 transition-colors duration-200";
-    return(
-    <AuthFormCard title={t('welcome_back', lang)} onBack={() => onNavigate('auth')} lang={lang}>
-        <form onSubmit={(e) => { e.preventDefault(); onLogin(); }} className="space-y-5">
-            <input type="email" placeholder={t('email', lang)} required className={inputStyle} />
-            <input type="password" placeholder={t('password', lang)} required className={inputStyle} />
-            <button type="submit" className="w-full bg-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-blue-600 transition-colors">
-                 {t('login', lang)}
-            </button>
-            <p className="text-center text-sm text-gray-500 pt-2">
-                {t('dont_have_account', lang)} <button type="button" onClick={() => onNavigate('signup')} className="font-semibold text-blue-600 hover:underline">{t('signup', lang)}</button>
-            </p>
-        </form>
-    </AuthFormCard>
-)};
-
-// #endregion
-
-const MainApp: React.FC<{ lang: Language; onLangChange: (l: Language) => void; onLogout: () => void; businessType: BusinessType | null }> = ({ lang, onLangChange, onLogout, businessType }) => {
+const MainApp: React.FC<{ lang: Language; onLangChange: (l: Language) => void; businessType: BusinessType | null }> = ({ lang, onLangChange, businessType }) => {
   const data = useAppData();
   const [activeView, setActiveView] = useState<MainAppView>('dashboard');
   
@@ -983,7 +816,6 @@ const MainApp: React.FC<{ lang: Language; onLangChange: (l: Language) => void; o
       <Header 
         title={pageTitles[activeView]} 
         onNavigate={setActiveView} 
-        onLogout={onLogout} 
         lang={lang}
         onLangChange={onLangChange}
       />
@@ -1015,71 +847,10 @@ const MainApp: React.FC<{ lang: Language; onLangChange: (l: Language) => void; o
 
 function App() {
   const [lang, setLang] = useLocalStorage<Language>('hisab_language', 'en');
-  const [businessType, setBusinessType] = useLocalStorage<BusinessType | null>('hisab_business_type', null);
-  const [view, setView] = useState<AppView>('splash');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => {
-    const loggedIn = localStorage.getItem('isAuthenticated') === 'true';
-    if (loggedIn) {
-        setIsAuthenticated(true);
-        setView('main');
-    }
-    
-    const splashTimer = setTimeout(() => {
-        if (!isReady) {
-            setIsReady(true);
-            if(view === 'splash' && !loggedIn) {
-              setView('auth');
-            }
-        }
-    }, 2000);
-    
-    return () => clearTimeout(splashTimer);
-  }, []);
-
-  const handleAuthSuccess = (type?: BusinessType) => {
-      localStorage.setItem('isAuthenticated', 'true');
-      if (type) {
-        setBusinessType(type);
-      }
-      setIsAuthenticated(true);
-      setView('main');
-  }
-  
-  const handleLogout = () => {
-      localStorage.removeItem('isAuthenticated');
-      localStorage.removeItem('hisab_business_type');
-      setIsAuthenticated(false);
-      setBusinessType(null);
-      setView('auth');
-  }
-
-  const renderContent = () => {
-    if (view === 'splash' && !isReady) {
-       return <SplashScreen onGetStarted={() => setView('auth')} lang={lang} />;
-    }
-    
-    if (!isAuthenticated) {
-        switch (view) {
-            case 'auth':
-                return <AuthScreen onNavigate={setView} onGoogleLogin={() => handleAuthSuccess()} onSkip={() => handleAuthSuccess()} lang={lang} />;
-            case 'login':
-                return <LoginScreen onLogin={() => handleAuthSuccess()} onNavigate={setView} lang={lang} />;
-            case 'signup':
-                return <SignUpScreen onSignUp={handleAuthSuccess} onNavigate={setView} lang={lang} />;
-            default:
-                return <AuthScreen onNavigate={setView} onGoogleLogin={() => handleAuthSuccess()} onSkip={() => handleAuthSuccess()} lang={lang} />;
-        }
-    }
-    return <MainApp lang={lang} onLangChange={setLang} onLogout={handleLogout} businessType={businessType} />
-  }
+  const [businessType, setBusinessType] = useLocalStorage<BusinessType | null>('hisab_business_type', BusinessType.Other);
 
   return (
-    <>
-        {renderContent()}
-    </>
+    <MainApp lang={lang} onLangChange={setLang} businessType={businessType} />
   );
 }
 

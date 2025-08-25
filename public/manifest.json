@@ -1,7 +1,7 @@
 {
-  "name": "Easy Khata Web",
+  "name": "Easy Khata",
   "short_name": "Easy Khata",
-  "description": "Easy Khata Web - Your Personal Finance Management PWA",
+  "description": "Easy Khata - Your Personal Finance Management PWA",
   "theme_color": "#1976d2",
   "background_color": "#ffffff",
   "display": "standalone",
